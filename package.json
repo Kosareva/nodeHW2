@@ -1,14 +1,14 @@
 {
-  "name": "node-tmpl",
+  "name": "node-hw-2",
   "version": "1.0.0",
-  "description": "Nodejs app template",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "lint": "eslint --ignore-path .gitignore"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Kosareva/node-tmpl.git"
+    "url": "git+https://github.com/Kosareva/nodeHW2.git"
   },
   "keywords": [],
   "author": "",
@@ -27,7 +27,7 @@
     }
   },
   "bugs": {
-    "url": "https://github.com/Kosareva/node-tmpl/issues"
+    "url": "https://github.com/Kosareva/nodeHW2/issues"
   },
-  "homepage": "https://github.com/Kosareva/node-tmpl#readme"
+  "homepage": "https://github.com/Kosareva/nodeHW2#readme"
 }
