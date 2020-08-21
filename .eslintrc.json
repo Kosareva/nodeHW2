@@ -21,7 +21,6 @@
         "no-duplicate-imports": "error",
         "no-useless-constructor": "error",
         "no-nested-ternary": "error",
-        "no-magic-numbers": "error",
         "no-var": "error",
         "key-spacing": ["error", { "afterColon": true }],
         "keyword-spacing": ["error", { "before": true }],
