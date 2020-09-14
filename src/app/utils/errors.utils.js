@@ -26,9 +26,8 @@ function validateSchema(schema, source = 'body', context) {
 
     if (error && error.isJoi) {
       res.status(HttpStatus.BAD_REQUEST).json(mapErrors(error.details));
-    } else {
-      next();
     }
+    next();
   };
 }
 

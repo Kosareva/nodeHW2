@@ -5,6 +5,22 @@ const db = require('../../db');
 
 const saltRounds = 10;
 
+async function handleUserIdParam(req, res, next, id) {
+  const usersCollection = await db.collection('users');
+  const user = usersCollection.getById(id);
+  const throwErrOnMethods = ['GET', 'PUT', 'DELETE'];
+  if (!user && throwErrOnMethods.includes(req.method)) {
+    const err = {
+      status: HttpStatus.NOT_FOUND,
+      message: 'User is not found'
+    };
+    next(err);
+  } else {
+    req.user = user;
+    next();
+  }
+}
+
 async function create(req, res, next) {
   try {
     const { login, password, age } = req.body;
@@ -35,18 +51,7 @@ async function getAll(req, res, next) {
 
 async function getById(req, res, next) {
   try {
-    const id = req.params.id;
-    const usersCollection = await db.collection('users');
-    const user = usersCollection.getById(id);
-    if (!user) {
-      const err = {
-        status: HttpStatus.NOT_FOUND,
-        message: 'User is not found'
-      };
-      next(err);
-    } else {
-      res.json(user);
-    }
+    res.json(req.user);
   } catch (err) {
     err.message = `Can not get user: ${err.message}`;
     next(err);
@@ -58,16 +63,8 @@ async function remove(req, res, next) {
     const id = req.params.id;
     const usersCollection = await db.collection('users');
     const user = usersCollection.remove(id);
-    if (!user) {
-      const err = {
-        status: HttpStatus.NOT_FOUND,
-        message: 'User is not found'
-      };
-      next(err);
-    } else {
-      await db.synchronize();
-      res.json(user);
-    }
+    await db.synchronize();
+    res.json(user);
   } catch (err) {
     err.message = `Can not remove user: ${err.message}`;
     next(err);
@@ -84,15 +81,7 @@ async function update(req, res, next) {
       ...age && { age },
     });
     await db.synchronize();
-    if (!user) {
-      const err = {
-        status: HttpStatus.NOT_FOUND,
-        message: 'User is not found'
-      };
-      next(err);
-    } else {
-      res.json(user);
-    }
+    res.json(user);
   } catch (err) {
     err.message = `Can not update user: ${err.message}`;
     next(err);
@@ -104,5 +93,7 @@ module.exports = {
   getAll,
   getById,
   remove,
-  update
+  update,
+
+  handleUserIdParam,
 };

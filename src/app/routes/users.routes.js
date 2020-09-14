@@ -7,6 +7,9 @@ const {
 const { validateSchema } = require('../utils');
 const { usersController } = require('../controllers');
 
+router.param('id',
+  usersController.handleUserIdParam
+);
 router.get('/',
   validateSchema(requestSchema.query.getAll, 'query'),
   usersController.getAll
