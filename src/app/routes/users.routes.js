@@ -1,14 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const {
-  request: requestSchema,
-  user: userSchema
-} = require('../schema');
+  request: requestSchema
+} = require('../validator');
 const { validateSchema } = require('../utils');
 const { usersController } = require('../controllers');
+const routesUtils = require('./utils');
 
 router.param('id',
-  usersController.handleUserIdParam
+  routesUtils.invokeOnMethods(
+    usersController.resolveUser,
+    ['GET', 'DELETE', 'PUT']
+  )
 );
 router.get('/',
   validateSchema(requestSchema.query.getAll, 'query'),
@@ -18,11 +21,9 @@ router.get('/:id',
   usersController.getById
 );
 router.post('/',
-  validateSchema(userSchema),
   usersController.create
 );
 router.put('/:id',
-  validateSchema(userSchema, 'body', { isUpdate: true }),
   usersController.update
 );
 router.delete('/:id',
