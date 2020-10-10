@@ -1,27 +1,21 @@
-const { mapErrors } = require('./utils');
-const HttpStatus = require('http-status-codes');
+const config = require('../config');
+const port = config.PORT || 3000;
 const express = require('express');
-const { userRoutes } = require('./routes');
+const loaders = require('./loaders');
+const { terminate } = require('../app/utils');
 
-const app = express();
+async function startServer() {
+  const app = express();
+  await loaders.init({ expressApp: app });
+  const server = app.listen(port, () => {
+    console.log(`App is listening on port ${port}`);
+  });
 
-app.use(express.json());
-app.use('/users', userRoutes);
+  const exitHandler = terminate(server);
+  process.on('uncaughtException', exitHandler(1, 'Unexpected Error'));
+  process.on('unhandledRejection', exitHandler(1, 'Unhandled Promise'));
+  process.on('SIGTERM', exitHandler(0, 'SIGTERM'));
+  process.on('SIGINT', exitHandler(0, 'SIGINT'));
+}
 
-app.use((req, res, next) => {
-  const status = HttpStatus.NOT_FOUND;
-  const err = {
-    status: status,
-    message: HttpStatus.getStatusText(status)
-  };
-  next(err);
-});
-
-app.use((err, req, res, next) => {
-  const status = err.status || HttpStatus.INTERNAL_SERVER_ERROR;
-  const message = err.message || HttpStatus.getStatusText(status);
-  res.status(status)
-    .json(mapErrors([{ message }]));
-});
-
-module.exports = app;
+module.exports = startServer;
