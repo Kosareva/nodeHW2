@@ -1,49 +1,61 @@
-const { User } = require('../../../db/pg/models');
+const {
+  User,
+  UserGroup
+} = require('../../../db/pg/models');
 const { Op } = require('sequelize');
 const makeUser = require('../../../models/user');
+const sequelize = require('../../../db/sequelize');
 
-async function addUser(data) {
+async function add(data) {
   const user = makeUser(data);
   return User.create(user);
 }
 
-async function deleteUser({ id }) {
-  const user = await User.findByPk(id);
-  return user.destroy();
+async function deleteById(id) {
+  await sequelize.transaction(async t => {
+    const user = await User.findByPk(id, { transaction: t });
+    await user.destroy({ transaction: t });
+    await UserGroup.destroy({
+      where: { 'userId': id },
+      transaction: t
+    });
+  });
+  return true;
 }
 
-async function findUser({ id }) {
+async function findById(id) {
   return User.findByPk(id);
 }
 
-async function findUsersBy({ limit, substr, searchBy, sortBy }) {
-  const query = {
-    ...limit && { limit },
-    ...substr && searchBy && {
-      where: {
-        [searchBy]: {
-          [Op.like]: `%${substr}%`
-        }
+async function getAutoSuggestUsers(loginSubstr, limit) {
+  return User.findAll({
+    where: {
+      login: {
+        [Op.like]: `%${loginSubstr}%`
       }
     },
-    ...sortBy && {
-      order: [
-        [sortBy, 'ASC']
-      ]
-    }
-  };
-  return User.findAll(query);
+    order: [
+      ['login', 'ASC']
+    ],
+    limit
+  });
 }
 
-async function updateUser({ age, id, password }) {
+async function list() {
+  return User.findAll();
+}
+
+async function updateById(id, data) {
   const user = await User.findByPk(id);
-  return user.update({ age, id, password });
+  const newUser = makeUser(data);
+  return user.update(newUser);
 }
 
 module.exports = {
-  addUser,
-  deleteUser,
-  findUser,
-  findUsersBy,
-  updateUser
+  add,
+  deleteById,
+  findById,
+  getAutoSuggestUsers,
+  list,
+  updateById
 };

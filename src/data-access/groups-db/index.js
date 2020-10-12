@@ -2,18 +2,16 @@ const {
   add,
   deleteById,
   findById,
-  getAutoSuggestUsers,
   list,
   updateById
 } = require('./pg');
 
-const usersDb = {
+const groupsDb = {
   add,
   deleteById,
   findById,
-  getAutoSuggestUsers,
   list,
   updateById
 };
 
-module.exports = usersDb;
+module.exports = groupsDb;

@@ -1,11 +1,17 @@
 const { mapErrors } = require('../utils');
 const HttpStatus = require('http-status-codes');
 const express = require('express');
-const { userRoutes } = require('../routes');
+const {
+  userRoutes,
+  groupRoutes,
+  userGroupRoutes
+} = require('../routes');
 
 async function load({ app }) {
   app.use(express.json());
   app.use('/users', userRoutes);
+  app.use('/groups', groupRoutes);
+  app.use('/group-members', userGroupRoutes);
 
   app.use((req, res, next) => {
     const status = HttpStatus.NOT_FOUND;

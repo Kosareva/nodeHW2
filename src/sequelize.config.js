@@ -5,7 +5,9 @@ module.exports = {
   development: {
     custom: {
       seeds: [
-        path.resolve(__dirname, 'db/pg/seeds/users.seeds.js')
+        path.resolve(__dirname, 'db/pg/seeds/users.seeds.js'),
+        path.resolve(__dirname, 'db/pg/seeds/groups.seeds.js'),
+        path.resolve(__dirname, 'db/pg/seeds/users-groups.seeds.js'),
       ]
     },
     config: {
@@ -20,7 +22,9 @@ module.exports = {
   production: {
     custom: {
       seeds: [
-        path.resolve(__dirname, 'db/pg/seeds/users.seeds.js')
+        path.resolve(__dirname, 'db/pg/seeds/users.seeds.js'),
+        path.resolve(__dirname, 'db/pg/seeds/groups.seeds.js'),
+        path.resolve(__dirname, 'db/pg/seeds/users-groups.seeds.js'),
       ]
     },
     config: {

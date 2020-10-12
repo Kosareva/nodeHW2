@@ -1,4 +1,4 @@
-const Users = require('../models').User;
+const { User } = require('../models');
 
 const predefinedUsers = [
   {
@@ -14,8 +14,8 @@ const predefinedUsers = [
 ];
 
 const seed = () => {
-  return Users.sync({ force: true }).then(() => {
-    return Users.bulkCreate(predefinedUsers);
+  return User.sync({ force: true }).then(() => {
+    return User.bulkCreate(predefinedUsers);
   });
 };
 
