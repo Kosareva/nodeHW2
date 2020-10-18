@@ -1,4 +1,5 @@
 const userSchema = require('./user.schema');
+const groupSchema = require('./group.schema');
 
 const JoiValidator = (payload, schema) => {
   const { error } = schema.validate(payload, { abortEarly: false });
@@ -13,6 +14,7 @@ const JoiValidator = (payload, schema) => {
 
 const validator = {
   userValidator: (payload) => JoiValidator(payload, userSchema),
+  groupValidator: (payload) => JoiValidator(payload, groupSchema),
 };
 
 module.exports = validator;

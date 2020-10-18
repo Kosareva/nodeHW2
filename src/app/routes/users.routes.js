@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const {
-  request: requestSchema
+  request: requestSchema,
+  user: userSchema
 } = require('../validator');
 const { validateSchema } = require('../utils');
 const { usersController } = require('../controllers');
@@ -14,16 +15,21 @@ router.param('id',
   )
 );
 router.get('/',
-  validateSchema(requestSchema.query.getAll, 'query'),
   usersController.getAll
+);
+router.get('/auto-suggest',
+  validateSchema(requestSchema.autoSuggestUsersQuery, 'query'),
+  usersController.getAutoSuggestUsers
 );
 router.get('/:id',
   usersController.getById
 );
 router.post('/',
+  validateSchema(userSchema, 'body', { isUpdate: false }),
   usersController.create
 );
 router.put('/:id',
+  validateSchema(userSchema, 'body', { isUpdate: true }),
   usersController.update
 );
 router.delete('/:id',
