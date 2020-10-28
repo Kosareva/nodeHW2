@@ -1,5 +1,6 @@
 const HttpStatus = require('http-status-codes');
 const groupsDb = require('../../data-access/groups-db');
+const { HttpError } = require('../../errors');
 
 async function create(req, res, next) {
   try {
@@ -24,6 +25,13 @@ async function getAll(req, res, next) {
 async function getById(req, res, next) {
   try {
     const group = req.group;
+    if (!group) {
+      return next(
+        new HttpError(`Group is not found`, {
+          status: HttpStatus.NOT_FOUND
+        })
+      );
+    }
     res.json(group);
   } catch (err) {
     err.message = `Can not get group by id: ${err.message}`;
@@ -34,8 +42,15 @@ async function getById(req, res, next) {
 async function remove(req, res, next) {
   try {
     const { id } = req.params;
-    await groupsDb.deleteById(id);
-    res.json(true);
+    const isGroupDeleted = groupsDb.deleteById(id);
+    if (!isGroupDeleted) {
+      return next(
+        new HttpError(`Group is not found`, {
+          status: HttpStatus.NOT_FOUND
+        })
+      );
+    }
+    res.json(isGroupDeleted);
   } catch (err) {
     err.message = `Can not remove group: ${err.message}`;
     next(err);
@@ -46,11 +61,11 @@ async function resolveGroup(req, res, next, id) {
   try {
     const group = await groupsDb.findById(id);
     if (!group) {
-      const err = {
-        status: HttpStatus.NOT_FOUND,
-        message: 'Group is not found'
-      };
-      return next(err);
+      return next(
+        new HttpError(`Group is not found`, {
+          status: HttpStatus.NOT_FOUND
+        })
+      );
     }
     req.group = group;
     next();
@@ -64,6 +79,13 @@ async function update(req, res, next) {
   try {
     const { id } = req.params;
     const group = await groupsDb.updateById(id, req.body);
+    if (!group) {
+      return next(
+        new HttpError(`Group is not found`, {
+          status: HttpStatus.NOT_FOUND
+        })
+      );
+    }
     res.json(group);
   } catch (err) {
     err.message = `Can not update group: ${err.message}`;

@@ -1,8 +1,8 @@
-function terminate(server) {
+function terminate(server, logger) {
   const exit = code => process.exit(code);
   return (code, reason) => (err) => {
     if (err && err instanceof Error) {
-      console.log(`${code}: ${reason}`, err.stack);
+      logger.error(`${code}: ${reason}`, err.stack);
     }
     server.close(exit);
     setTimeout(exit, 1000).unref();

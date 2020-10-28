@@ -6,29 +6,26 @@ const {
   groupRoutes,
   userGroupRoutes
 } = require('../routes');
+const getLogger = require('../logger');
 
 async function load({ app }) {
+  const logger = getLogger();
   app.use(express.json());
+  app.use('*', (req, res, next) => {
+    logger.info(`${req.method} ${req.url} has been called`);
+    next();
+  });
   app.use('/users', userRoutes);
   app.use('/groups', groupRoutes);
   app.use('/group-members', userGroupRoutes);
 
-  app.use((req, res, next) => {
-    const status = HttpStatus.NOT_FOUND;
-    const err = {
-      status: status,
-      message: HttpStatus.getStatusText(status)
-    };
-    next(err);
-  });
-
   app.use((err, req, res, next) => {
     const status = err.status || HttpStatus.INTERNAL_SERVER_ERROR;
     const message = err.message || HttpStatus.getStatusText(status);
+    logger.error(`${status}: ${message}`);
     res.status(status)
       .json(mapErrors([{ message }]));
   });
-  return app;
 }
 
 module.exports = load;
