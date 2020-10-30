@@ -31,6 +31,7 @@ class ValidationError extends ApplicationError {
     return [
       'propertyName',
       'propertyValue',
+      'messages'
     ];
   }
 
