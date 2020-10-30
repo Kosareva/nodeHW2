@@ -5,6 +5,7 @@ const {
 const { Op } = require('sequelize');
 const makeUser = require('../../../models/user');
 const sequelize = require('../../../db/sequelize');
+const AppValidationError = require('../../../errors').ValidationError;
 
 async function add(data) {
   const user = makeUser(data);
@@ -30,7 +31,7 @@ async function findById(id) {
 async function getAutoSuggestUsers(loginSubstr, limit) {
   return User.findAll({
     where: {
-      login: {
+      'login': {
         [Op.like]: `%${loginSubstr}%`
       }
     },
@@ -39,6 +40,18 @@ async function getAutoSuggestUsers(loginSubstr, limit) {
     ],
     limit
   });
+}
+
+async function getUserByLoginAndPassword(login, password) {
+  const user = await User.findOne({
+    where: {
+      'login': login
+    }
+  });
+  if (user && !user.isPasswordValid(password)) {
+    throw new AppValidationError(`Password is not valid`);
+  }
+  return user;
 }
 
 async function list() {
@@ -56,6 +69,7 @@ module.exports = {
   deleteById,
   findById,
   getAutoSuggestUsers,
+  getUserByLoginAndPassword,
   list,
   updateById
 };

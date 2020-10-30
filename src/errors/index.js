@@ -23,7 +23,25 @@ class HttpError extends ApplicationError {
   }
 }
 
+class DBError extends ApplicationError {
+}
+
+class ValidationError extends ApplicationError {
+  get settables() {
+    return [
+      'propertyName',
+      'propertyValue',
+    ];
+  }
+
+  get message() {
+    return `${this.message}; ${this.propertyName} ${this.propertyValue}`;
+  }
+}
+
 module.exports = {
   ApplicationError,
-  HttpError
+  DBError,
+  HttpError,
+  ValidationError
 };
