@@ -3,6 +3,7 @@ const {
   deleteById,
   findById,
   getAutoSuggestUsers,
+  getUserByLoginAndPassword,
   list,
   updateById
 } = require('./pg');
@@ -12,6 +13,7 @@ const usersDb = {
   deleteById,
   findById,
   getAutoSuggestUsers,
+  getUserByLoginAndPassword,
   list,
   updateById
 };

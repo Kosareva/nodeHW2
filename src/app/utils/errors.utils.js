@@ -1,4 +1,4 @@
-const HttpStatus = require('http-status-codes');
+const AppValidationError = require('../../errors').ValidationError;
 
 function mapErrors(schemaErrors) {
   const errors = schemaErrors.map(err => {
@@ -25,7 +25,7 @@ function validateSchema(schema, source = 'body', context) {
     });
 
     if (error && error.isJoi) {
-      return res.status(HttpStatus.BAD_REQUEST).json(mapErrors(error.details));
+      return next(new AppValidationError('', { messages: error.details }));
     }
     next();
   };

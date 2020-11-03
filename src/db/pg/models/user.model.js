@@ -48,6 +48,10 @@ User.init({
   paranoid: true
 });
 
+User.prototype.isPasswordValid = function (password) {
+  return bcrypt.compareSync(password, this.password);
+};
+
 User.beforeCreate(encryptPasswordIfChanged);
 User.beforeUpdate(encryptPasswordIfChanged);
 
