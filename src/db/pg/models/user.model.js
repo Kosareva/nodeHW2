@@ -53,6 +53,11 @@ User.prototype.isPasswordValid = function (password) {
 };
 
 User.beforeCreate(encryptPasswordIfChanged);
+User.beforeBulkCreate((users = []) => {
+  users.forEach(user => {
+    encryptPasswordIfChanged(user);
+  });
+});
 User.beforeUpdate(encryptPasswordIfChanged);
 
 module.exports = User;
