@@ -11,11 +11,13 @@ const getLogger = require('../logger');
 const getErrorHandlerMiddleware = require('../error-handling').middlewares.errorHandler;
 const getJwtAuthMiddleware = require('../auth').middlewares.jwtAuthenticate;
 const strategies = require('../auth').strategies;
+const { responseTime } = require('../utils/middlewares');
 
 async function load({ app }) {
   const logger = getLogger();
   const jwtAuthMiddleware = getJwtAuthMiddleware(passport);
   const errorHandlerMiddleware = getErrorHandlerMiddleware({ logger });
+  app.use(responseTime({ logger }));
   app.use(cors());
   app.use(express.json());
   app.use(passport.initialize());

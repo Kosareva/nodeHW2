@@ -1,13 +1,14 @@
 const { mapErrors } = require('../../utils');
 const HttpStatus = require('http-status-codes');
+const { ValidationError } = require('../../../errors');
 
 const middleware = ({ logger }) => (err, req, res, next) => {
   let status = err.status;
   let message = err.message;
   let messages = err.messages || '';
   if (!err.status) {
-    switch (err.name) {
-      case 'ValidationError':
+    switch (true) {
+      case err instanceof ValidationError:
         status = HttpStatus.UNPROCESSABLE_ENTITY;
         break;
       default:
