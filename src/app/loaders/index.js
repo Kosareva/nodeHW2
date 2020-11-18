@@ -1,19 +1,14 @@
 const expressLoader = require('./express.loader');
-const loggerLoader = require('./logger.loader');
 const dbLoader = require('./db.loader');
+const logger = require('../logger');
 
-async function init({ expressApp: app, logLevel, appName }) {
-  const logger = await loggerLoader({ logLevel, appName });
-  logger.info('logger has been initialized');
+async function init({ expressApp: app }) {
   await dbLoader();
   logger.info('Connection has been established successfully');
   await expressLoader({ app });
-  logger.info('express app has been initialized');
+  logger.info('Express app has been initialized');
 
-  return {
-    app,
-    logger
-  };
+  return { app };
 }
 
 module.exports = {

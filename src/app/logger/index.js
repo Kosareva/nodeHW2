@@ -1,3 +1,3 @@
-const winston = require('winston');
+const logger = require('../loaders/logger.loader');
 
-module.exports = () => winston.loggers.get('appLogger');
+module.exports = logger;
