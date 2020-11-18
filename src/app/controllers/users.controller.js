@@ -7,7 +7,7 @@ async function create(req, res, next) {
     const user = await usersDb.add(req.body);
     res.json(user);
   } catch (err) {
-    err.message = `Can not create users: ${err.message}`;
+    err.message = `Can not create user: ${err.message}`;
     next(err);
   }
 }

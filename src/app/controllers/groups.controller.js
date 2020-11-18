@@ -42,7 +42,7 @@ async function getById(req, res, next) {
 async function remove(req, res, next) {
   try {
     const { id } = req.params;
-    const isGroupDeleted = groupsDb.deleteById(id);
+    const isGroupDeleted = await groupsDb.deleteById(id);
     if (!isGroupDeleted) {
       return next(
         new HttpError(`Group is not found`, {
