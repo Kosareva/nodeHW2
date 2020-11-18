@@ -4,8 +4,8 @@ const { ValidationError } = require('../../../errors');
 
 const middleware = ({ logger }) => (err, req, res, next) => {
   let status = err.status;
-  let message = err.message;
-  let messages = err.messages || '';
+  let message = err.message || '';
+  let messages = err.messages;
   if (!err.status) {
     switch (true) {
       case err instanceof ValidationError:
@@ -19,7 +19,7 @@ const middleware = ({ logger }) => (err, req, res, next) => {
   if (!err.message) {
     message = HttpStatus.getStatusText(status);
   }
-  logger.error(`${status}: ${JSON.stringify(messages) || message}`);
+  logger.error(`${status}: ${messages ? JSON.stringify(messages) : message}`);
   res.status(status)
     .json(mapErrors(messages || [{ message }]));
 };
