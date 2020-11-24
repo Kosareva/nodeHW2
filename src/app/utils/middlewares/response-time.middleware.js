@@ -7,7 +7,7 @@ function responseTime({ logger }) {
     res.on('finish', () => {
       const diff = process.hrtime(startHrTime);
       const diffInMs = diff[0] * 1000 + diff[1] / NS_PER_MS;
-      logger.info(`${req.path}: ${diffInMs}ms`);
+      logger.info(`${req.originalUrl}: ${diffInMs}ms`);
     });
     next();
   };

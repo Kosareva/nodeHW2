@@ -1,5 +1,1 @@
-const startApp = require('./app');
-
-(async () => {
-  await startApp();
-})();
+require('./app/server');

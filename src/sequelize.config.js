@@ -12,7 +12,7 @@ module.exports = {
     },
     config: {
       dialect: 'postgres',
-      database: 'hw2',
+      database: 'hw2-dev',
       username: 'postgres',
       password: 'admin',
       host: 'localhost',
@@ -34,6 +34,23 @@ module.exports = {
       password: config.pg.PASSWORD,
       host: config.pg.HOST,
       port: config.pg.PORT
+    }
+  },
+  test: {
+    custom: {
+      seeds: [
+        path.resolve(__dirname, 'db/pg/seeds/users.seeds.js'),
+        path.resolve(__dirname, 'db/pg/seeds/groups.seeds.js'),
+        path.resolve(__dirname, 'db/pg/seeds/users-groups.seeds.js'),
+      ]
+    },
+    config: {
+      dialect: 'postgres',
+      database: 'hw2-test',
+      username: 'postgres',
+      password: 'admin',
+      host: 'localhost',
+      port: 5432
     }
   }
 };
