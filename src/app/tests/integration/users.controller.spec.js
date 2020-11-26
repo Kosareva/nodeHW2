@@ -1,9 +1,11 @@
-const userSeeds = require('../../../db/pg/seeds/users.seeds');
+// const userSeeds = require('../../../db/pg/old/users.seeds');
+const userSeeder = require('../../../db/pg/seeders/demo-user');
 const request = require('supertest');
 const initApp = require('../../app');
 let app,
   token;
-const db = require('../../../db/sequelize');
+const { sequelize: db, Sequelize } = require('../../../db/sequelize');
+const queryInterface = db.getQueryInterface();
 
 describe('test the user path', () => {
   beforeAll(async () => {
@@ -11,7 +13,7 @@ describe('test the user path', () => {
   });
 
   beforeEach(async () => {
-    await userSeeds();
+    await userSeeder.up(queryInterface, Sequelize);
 
     const response = await request(app)
       .post('/auth/login')

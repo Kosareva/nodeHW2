@@ -4,7 +4,7 @@ const {
 } = require('../../../db/pg/models');
 const { Op } = require('sequelize');
 const makeUser = require('../../../models/user');
-const sequelize = require('../../../db/sequelize');
+const { sequelize } = require('../../../db/sequelize');
 const AppValidationError = require('../../../errors').ValidationError;
 
 async function add(data) {

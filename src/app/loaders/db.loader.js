@@ -1,4 +1,4 @@
-const sequelize = require('../../db/sequelize');
+const { sequelize } = require('../../db/sequelize');
 
 async function load() {
   await sequelize.authenticate();
