@@ -7,7 +7,7 @@ const customerPermissions = [
   permissions.enum.UPLOAD_FILES
 ];
 
-const predefinedGroups = [
+const groups = [
   {
     name: 'admin',
     permissions: adminPermissions
@@ -18,10 +18,13 @@ const predefinedGroups = [
   }
 ];
 
-const seed = () => {
-  return Group.sync({ force: true }).then(() => {
-    return Group.bulkCreate(predefinedGroups);
-  });
-};
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await Group.sync({ force: true });
+    await Group.bulkCreate(groups);
+  },
 
-module.exports = seed;
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.bulkDelete('Groups', null);
+  }
+};

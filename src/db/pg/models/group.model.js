@@ -1,4 +1,4 @@
-const sequelize = require('../../sequelize');
+const { sequelize } = require('../../sequelize');
 const { DataTypes, Model } = require('sequelize');
 const { permissions } = require('../../../models/group');
 const { containsOnly } = require('../../../utils');
@@ -11,7 +11,8 @@ Group.init({
     allowNull: false,
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
-    type: DataTypes.UUID
+    type: DataTypes.UUID,
+    unique: true
   },
   name: {
     type: DataTypes.STRING,
