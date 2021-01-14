@@ -8,9 +8,9 @@
     "clean": "rimraf dist",
     "lint": "eslint --ignore-path .gitignore",
     "test": "jest",
-    "sequelize": "sequelize",
-    "start:dev": "npm run sequelize db:migrate:undo:all && npm run sequelize db:migrate && npm run sequelize db:seed:all && nodemon --exec babel-node src/main.js",
-    "start:prod": "npm run clean && npm run sequelize db:migrate:undo:all && npm run sequelize db:migrate && npm run build && nodemon --exec babel-node dist/main.js"
+    "setup": "sequelize-cli db:migrate && sequelize-cli db:seed:all && npm run start:dev",
+    "start:dev": "nodemon --exec babel-node src/main.js",
+    "start:prod": "node node_modules/@babel/node/bin/babel-node.js dist/main.js"
   },
   "repository": {
     "type": "git",
