@@ -3,11 +3,11 @@ const config = require('./config');
 module.exports = {
   development: {
     dialect: 'postgres',
-    database: 'hw2-dev',
-    username: 'postgres',
-    password: 'admin',
-    host: 'localhost',
-    port: 5432
+    database: config.pg.DATABASE,
+    username: config.pg.USER,
+    password: config.pg.PASSWORD,
+    host: config.pg.HOST,
+    port: config.pg.PORT
   },
   production: {
     dialect: 'postgres',
@@ -21,7 +21,7 @@ module.exports = {
     dialect: 'postgres',
     database: 'hw2-test',
     username: 'postgres',
-    password: 'admin',
+    password: 'postgres',
     host: 'localhost',
     port: 5432
   }
